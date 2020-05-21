@@ -98,7 +98,7 @@ module mod_output
       if(myid.eq.0) then
         open(unit=iunit,file=fname)
         do jj=1,ng(2)
-          write(iunit,'(2E15.7)') (1.*jj-.5)/(1.*ng(2)),p1d(jj)
+          write(iunit,'(2E15.7)') (jj-.5)*dy,p1d(jj)
         enddo
         close(iunit)
       endif
@@ -118,8 +118,8 @@ module mod_output
       p1d(:) = p1d(:)/(1.*ng(2))
       if(myid.eq.0) then
         open(unit=iunit,file=fname)
-        do i=1,ng(1)
-          write(iunit,'(2E15.7)') (1.*i-.5)/(1.*n(1)),p1d(j)
+        do ii=1,ng(1)
+          write(iunit,'(2E15.7)') (ii-.5)*dx,p1d(ii)
         enddo
         close(iunit)
       endif
