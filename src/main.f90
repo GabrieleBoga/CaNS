@@ -167,7 +167,7 @@ program cans
   call initgrid(inivel,ng(3),gr,lz,dzc_g,dzf_g,zc_g,zf_g)
   if(myid.eq.0) then
     inquire(iolength=rlen) 1._rp
-    open(99,file=trim(datadir)//'grid.bin',access='direct',recl=4*n(3)*rlen)
+    open(99,file=trim(datadir)//'grid.bin',access='direct',recl=4*ng(3)*rlen)
     write(99,rec=1) dzc_g(1:ng(3)),dzf_g(1:ng(3)),zc_g(1:ng(3)),zf_g(1:ng(3))
     close(99)
     open(99,file=trim(datadir)//'grid.out')
