@@ -24,7 +24,7 @@ module mod_forcing
     real(rp), intent(in   ) , dimension(0:) :: dzc,dzf
     real(rp), intent(in   ) , dimension(0:,0:,0:) :: psi_u,psi_v,psi_w
     real(rp), intent(inout) , dimension(0:,0:,0:) :: u,v,w
-    real(rp), intent(inout), dimension(3) :: f
+    real(rp), intent(out  ), dimension(3) :: f
     real(rp) :: psix,psiy,psiz,fx,fy,fz,fxtot,fytot,fztot
     integer :: i,j,k!,ip,jp,kp
     !
@@ -61,10 +61,10 @@ module mod_forcing
       enddo
     enddo
     !$OMP END PARALLEL DO
-    call mpi_allreduce(MPI_IN_PLACE,f(1),3,MPI_REAL_RP,MPI_SUM,MPI_COMM_WORLD,ierr)
     f(1) = fxtot/(l(1)*l(2)*l(3))
     f(2) = fytot/(l(1)*l(2)*l(3))
     f(3) = fztot/(l(1)*l(2)*l(3))
+    call mpi_allreduce(MPI_IN_PLACE,f(1),3,MPI_REAL_RP,MPI_SUM,MPI_COMM_WORLD,ierr)
     return
   end subroutine force_vel
   !
