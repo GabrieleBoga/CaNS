@@ -34,7 +34,7 @@ module mod_load
       call MPI_FILE_GET_SIZE(fh,filesize,ierr)
       ng(1:3) = n(1:3)*dims(1:3)
       lenr = storage_size(time)/8
-      good = (product(ng)*4+2)*lenr
+      good = int(product(ng)*4+2,MPI_OFFSET_KIND)*lenr
       if(filesize.ne.good) then
         if(myid.eq.0) print*, ''
         if(myid.eq.0) print*, '*** Simulation aborted due a checkpoint file with incorrect size ***'
