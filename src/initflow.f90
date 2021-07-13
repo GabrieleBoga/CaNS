@@ -26,6 +26,7 @@ module mod_initflow
     real(rp) :: xc,yc,zc,xf,yf,zf
     real(rp) :: reb,retau
     real(rp) :: ubulk
+    real(rp) :: kf,f,abc(3)
     !
     allocate(u1d(n(3)))
     is_noise = .false.
@@ -74,6 +75,22 @@ module mod_initflow
           enddo
         enddo
       enddo
+    case('abc')
+      abc(:) = [1.,1.,1.]
+      kf     = 1._rp
+      f      = 1._rp
+      do k=1,n(3)
+        zc = zclzi(k)*2.*pi
+        do j=1,n(2)
+          yc = (j+ijk_start(2)-.5)*dy/ly*2.*pi
+          do i=1,n(1)
+            xc = (i+ijk_start(1)-.5)*dx/lx*2.*pi
+            u(i,j,k) = f*visc*(kf*2.*pi/lx)**2*(abc(1)*sin(kf*zc) + abc(3)*cos(kf*yc))
+            v(i,j,k) = f*visc*(kf*2.*pi/ly)**2*(abc(2)*sin(kf*xc) + abc(1)*cos(kf*zc))
+            w(i,j,k) = f*visc*(kf*2.*pi/lz)**2*(abc(3)*sin(kf*yc) + abc(2)*cos(kf*xc))
+          enddo
+        enddo
+      enddo
     case('pdc')
       if(is_wallturb) then ! turbulent flow
         retau = uref*lref/visc
@@ -93,7 +110,7 @@ module mod_initflow
       call MPI_FINALIZE(ierr)
       error stop
     end select
-    if(inivel.ne.'tgv') then
+    if(inivel.ne.'tgv' .and. inivel.ne.'abc') then
       do k=1,n(3)
         do j=1,n(2)
           do i=1,n(1)

@@ -32,14 +32,15 @@ integer :: icheck,iout0d,iout1d,iout2d,iout3d,isave
 integer, dimension(3) :: dims
 integer :: nthreadsmax
 !
-character(len=1), dimension(0:1,3,3) ::  cbcvel
-real(rp)         , dimension(0:1,3,3) :: bcvel
-character(len=1), dimension(0:1,3)   ::  cbcpre
-real(rp)         , dimension(0:1,3)   ::   bcpre
+character(len=1), dimension(0:1,3,3) :: cbcvel
+real(rp)        , dimension(0:1,3,3) ::  bcvel
+character(len=1), dimension(0:1,3)   :: cbcpre
+real(rp)        , dimension(0:1,3)   ::  bcpre
 !
 real(rp), dimension(3) :: bforce
 logical , dimension(3) :: is_forced
 real(rp), dimension(3) :: velf
+character(len=3) :: forcing
 !
 integer , dimension(3) :: ng
 integer , dimension(3) :: n
@@ -79,6 +80,7 @@ contains
         read(iunit,*)  bforce(1),bforce(2),bforce(3)
         read(iunit,*)  is_forced(1),is_forced(2),is_forced(3)
         read(iunit,*)  velf(1),velf(2),velf(3)
+        read(iunit,*)  forcing
         read(iunit,*) dims(1),dims(2)
         read(iunit,*) nthreadsmax
       else

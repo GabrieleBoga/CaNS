@@ -31,6 +31,7 @@ program cans
   use mod_debug      , only: chkmean
   use mod_fft        , only: fftini,fftend
   use mod_fillps     , only: fillps
+  use mod_force_time_dependent, only: force_time_dependent
   use mod_initflow   , only: initflow
   use mod_initgrid   , only: initgrid
   use mod_initmpi    , only: initmpi
@@ -49,9 +50,9 @@ program cans
                              dims, &
                              nthreadsmax, &
                              gr, &
-                             is_forced,bforce, &
+                             is_forced,bforce,forcing, &
                              n,ng,l,dl,dli, &
-                             read_input
+                             read_input,pi
   use mod_sanity     , only: test_sanity
   use mod_solver     , only: solver
   use mod_types
@@ -271,6 +272,7 @@ program cans
       if(is_forced(1)) up(1:n(1),1:n(2),1:n(3)) = up(1:n(1),1:n(2),1:n(3)) + f(1)
       if(is_forced(2)) vp(1:n(1),1:n(2),1:n(3)) = vp(1:n(1),1:n(2),1:n(3)) + f(2)
       if(is_forced(3)) wp(1:n(1),1:n(2),1:n(3)) = wp(1:n(1),1:n(2),1:n(3)) + f(3)
+      call force_time_dependent(forcing,1._rp*visc,1._rp,[1._rp,1._rp,1._rp],n,l,dl,zc,dtrk,up,vp,wp)
 #ifdef IMPDIFF
       alpha = -1./(.5*visc*dtrk)
       !$OMP WORKSHARE
